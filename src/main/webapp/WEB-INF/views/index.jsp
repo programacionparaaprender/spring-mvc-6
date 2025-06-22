@@ -34,7 +34,7 @@
         <p>${mensaje}</p>
         
         <p>Fecha actual: ${fecha}</p>
-        
+        <p>Total usuarios: ${totalUsuarios}</p>
         <h3>Tecnologías utilizadas:</h3>
         <ul class="tech-list">
             <c:forEach items="${tecnologias}" var="tech">
