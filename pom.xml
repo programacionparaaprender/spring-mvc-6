@@ -9,15 +9,52 @@
 
     <properties>
         <java.version>21</java.version>
-        <spring.version>6.1.6</spring.version>
+        <spring.version1>6.1.6</spring.version1>
         <servlet-api.version>6.0.0</servlet-api.version>
         <postgresql.version>42.6.0</postgresql.version>
         <lombok.version>1.18.30</lombok.version>
         
-   
+        
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<spring.version>6.2.7</spring.version>
+		<org.springframework.security.version>6.5.1</org.springframework.security.version>
+		<hibernate.version>6.5.2.Final</hibernate.version>
+		<jakarta.ee.version>11.0.0</jakarta.ee.version>
+	
     </properties>
-
+	<!--unificar versiones de Spring y Jakarta-->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>6.2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
     <dependencies>
+    	<dependency>
+			<groupId>org.springframework.webflow</groupId>
+			<artifactId>spring-webflow</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+	    <dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-webmvc</artifactId>
+		    <version>${spring.version}</version>
+		</dependency>
+	    <dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.5</version>
+		</dependency>
 		<dependency>
 		    <groupId>jakarta.annotation</groupId>
 		    <artifactId>jakarta.annotation-api</artifactId>

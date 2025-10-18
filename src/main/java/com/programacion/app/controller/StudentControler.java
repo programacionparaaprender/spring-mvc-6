@@ -8,11 +8,15 @@ import java.util.logging.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.luv2code.jsf.jdbc.Student;
 import com.luv2code.jsf.jdbc.StudentDbUtil;
@@ -23,6 +27,7 @@ import jakarta.annotation.PostConstruct;
 import net.sf.json.JSONSerializer;
 
 @Controller
+@RequestMapping("/students")
 public class StudentControler {
     List<Usuario> users;
     
@@ -47,20 +52,36 @@ public class StudentControler {
         }
     }
     
-    @RequestMapping("/students/")
+    
+    @PostMapping("/upload/")
+    public String uploadExcel(@RequestParam("file") MultipartFile file, Model model) {
+        try {
+            if (!file.isEmpty()) {
+                // Aquí procesas el Excel con Apache POI
+                System.out.println("Archivo recibido: " + file.getOriginalFilename());
+                // TODO: Parsear y guardar estudiantes en BD
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Error al procesar el archivo: " + e.getMessage());
+        }
+        return "Archivo procesado exitos"; // Redirige a la lista después de subir
+    }
+    
+    @RequestMapping({"", "/"})
     public String listStudent(Model model) {
     	init();
         model.addAttribute("students", students);
         return "list-students";
     }
     
-    @RequestMapping(value = "/students/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String showAddForm(Model model) {
         model.addAttribute("student", new Student());
         return "student-form";
     }
 
-    @RequestMapping(value = "/students/edit/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String showEditForm(@PathVariable("id") int id, Model model) {
         try {
             Student student = studentDbUtil.getStudent(id);
@@ -73,7 +94,7 @@ public class StudentControler {
         return "student-form";
     }
 
-    @RequestMapping(value = "/students/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String saveStudent(@ModelAttribute("student") Student student, 
                             BindingResult result, 
                             Model model) {
@@ -114,7 +135,7 @@ public class StudentControler {
         return "redirect:/students/";
     }
 
-    @RequestMapping(value = "/students/delete/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteStudent(@PathVariable("id") int id, Model model) {
         try {
             studentDbUtil.deleteStudent(id);
